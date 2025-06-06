@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buy Now</title>
+  <!-- Load Stripe.js on your client -->
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h1>Purchase Our Product</h1>
+  <button id="checkout-button">Checkout</button>
+
+  <script>
+    // Initialize Stripe.js with your publishable key
+    // Replace with your own key: pk_test_...
+    const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
+
+    const checkoutButton = document.getElementById('checkout-button');
+    checkoutButton.addEventListener('click', () => {
+      fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          // any metadata or lookup keys you need:
+          // For example, the Price ID you copied: price_1234abcd
+          priceId: 'price_1234abcd'
+        })
+      })
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(({ sessionId }) => {
+        // Redirect to Stripe Checkout
+        return stripe.redirectToCheckout({ sessionId });
+      })
+      .then((result) => {
+        if (result.error) {
+          // Show error to your customer
+          alert(result.error.message);
+        }
+      })
+      .catch((error) => {
+        console.error('Error creating checkout session:', error);
+        alert('Could not start checkout. Please try again.');
+      });
+    });
+  </script>
+</body>
+</html>
