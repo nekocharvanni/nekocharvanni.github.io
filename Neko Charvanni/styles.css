@@ -173,3 +173,32 @@ h1, h2, .storynav {
   border-radius: 5px;
   cursor: pointer;
 }
+
+/* ===== STORIES LANDING PAGE ===== */
+.story-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.story-list li {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.story-list li:hover {
+  transform: translateY(-3px);
+}
+
+.story-list a {
+  display: block;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--primary-color);
+  font-weight: 500;
+}
