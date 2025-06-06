@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chocolate and Matcha — Chapter One</title>
+
+  <!-- Global styles -->
+  <link href="../styles.css" rel="stylesheet" />
+
+  <!-- Page-specific theme overrides -->
+  <style>
+    /* === Background & Theme Colors === */
+    body {
+      /* Tea Room image you generated; adjust path if needed */
+      background: url("../assets/backgrounds/tea-room.jpg") center/cover no-repeat fixed;
+      color: #3E2C1C;         /* dark chocolate text */
+      background-color: #F7F4EA; /* matcha-light fallback */
+    }
+    h1, h2 {
+      color: #6B3E26;         /* rich chocolate headings */
+    }
+    a, .vertical-nav a {
+      color: #A3C293;         /* matcha green links */
+    }
+    a:hover, .vertical-nav a:hover {
+      color: #7B3F00;         /* darker chocolate on hover */
+    }
+
+    /* === Vertical Sidebar Navigation === */
+    .vertical-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background-color: rgba(62, 44, 28, 0.85); /* semi-opaque chocolate */
+      padding-top: 2rem;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.3);
+    }
+    .vertical-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vertical-nav li {
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .vertical-nav a {
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* === Main Content === */
+    main {
+      margin-left: 220px; /* allow for sidebar + gap */
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(247, 244, 234, 0.9); /* matcha-light overlay */
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    article p {
+      margin-bottom: 1.25rem;
+      line-height: 1.7;
+    }
+
+    /* Responsive tweak */
+    @media (max-width: 768px) {
+      .vertical-nav {
+        position: relative;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+        background-color: rgba(62,44,28,0.9);
+      }
+      main {
+        margin: 0;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Vertical Sidebar -->
+  <nav class="vertical-nav">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../stories.html">All Stories</a></li>
+      <li><a href="../avatar.html">Avatar</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Chapter Content -->
+  <main>
+    <header>
+      <h1>Chocolate and Matcha</h1>
+      <h2>Chapter One &mdash; Osaka, Japan</h2>
+    </header>
+
+    <article>
+      <p>In the garden following the path of arranged onyx marble stepping-stones, past the water basin and near cherry blossom trees in tranquil bloom, Kazuhiko Wakahisa sat on the stone bench sipping green tea he prepared. His eyes wandered past the shrubberies arranged simplistically around the garden to the jade fountain. Two intricately sculptured jade dragons twisted around a miniature jade Mount Fuji. Crystal clear water serenely flowed through their fangs, cascading down Mount Fuji until the water trickled into the base. Kazuhiko continued observing the flowing water wishing he could wash away the events of the past year. Taking a deep breath, he inhaled the peaceful air and sipped more of his tea, gazing upon the dragons in awe, silencing his thoughts. The fountain was his favorite escape from a busy day as a chadōka, master of a tea ceremony. His job as a chadōka wasn’t demanding. However, the mastery and sophistication within his family name brought stress from the innumerable guests wanting to taste the tea of the last remaining male chadōka in the Wakahisa family.</p>
+
+      <p>As a Wakahisa, his family name meant superb and well-prepared tea. As a tea host, his skills passed on from a long line of Wakahisas led tea drinkers to say, <em>Wakahisa ryu no aji ga hoshii</em> (“give me that Wakahisa flavor”). His family talents and history gave him high esteem amongst the aristocrats of Japan and around the world. His high grade of tea sold worldwide as an international delicacy giving him global fame. Kazuhiko was the only Wakahisa left that could continue his great-grandfather's legacy over nine generations ago, Tenoshi Wakahisa, the first Wakahisa to become a master at preparing green tea. Being a chadōka was a heavy burden, but Kazuhiko took pride in his honorable profession. If only he had shared the same standards concerning his love life, he might have been happy.</p>
+
+      <!-- ...continue wrapping each paragraph similarly... -->
+
+      <p>…(rest of chapter copy here)…</p>
+    </article>
+  </main>
+</body>
+</html>
