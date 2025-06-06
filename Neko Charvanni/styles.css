@@ -1,0 +1,175 @@
+* {
+ box-sizing: border-box;
+}
+
+body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  color: #FFD700;
+  font-family: 'Cormorant Garamond', serif;
+  background-image: url("Images/PromiseRoseForest.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media(max-width:1024px){
+  h1 { 
+   font-size:28px;
+ }
+ 
+  .intro {
+   font-size:1.8rem;
+   flex-direction: column;
+   text-align: center;
+
+ }
+
+  li {
+   padding: 15px 30px;
+ }
+
+  a {
+   font-size: 0.9rem;
+   width: 100%;
+   text-align: center;
+ }
+}
+
+@media (max-width: 600px) {
+ .intro {
+  padding: 10vw;
+  font-size: 1.4rem;
+ }
+
+ nav ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ }
+
+ li {
+  float: none;
+  padding: 10px 0;
+ }
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+h1 {
+  background: linear-gradient(white, green, purple);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  padding: 25px 25px;
+}
+
+.intro {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  font-size: 2.2rem;
+  background-image: url("Images/forestqueen.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  padding: 5vw;
+  text-align: center;
+  padding: 4vw;
+  min-height: 60vh;
+}
+
+li {
+  float: left;
+  padding: 25px 50px;
+}
+
+a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  background: linear-gradient(
+    to bottom,
+    darkgreen 10%,
+    darkolivegreen 20%,
+    darkseagreen 30%,
+    forestgreen 40%,
+    seagreen 50%,
+    gold 60%,
+    goldenrod 70%,
+    darkgoldenrod 80%,
+    antiquewhite 90%,
+    floralwhite 91%,
+    ghostwhite 95%,
+    snow 100%
+  );
+}
+
+h1, h2, .storynav {
+  font-family: 'Cinzel Decorative', serif;
+}
+
+.mem {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.mem-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+.mem-content input[type="email"] {
+  padding: 0.5rem;
+  width: 80%;
+  margin-top: 1rem;
+}
+
+.mem-content button {
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  background-color: #d83a56;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
