@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful - Neko Charvanni</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body { 
+      font-family: 'Cormorant Garamond', serif;
+      background: linear-gradient(135deg, #4A1A4A, #2A0A2A, #1A051A);
+      color: #FFF8DC;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .success-container {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 600px;
+      width: 100%;
+      border: 2px solid #FFD700;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .success-icon {
+      font-size: 4rem;
+      color: #00FF7F;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    h1 { 
+      font-family: 'Cinzel Decorative', serif;
+      color: #FFD700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p { 
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .benefits {
+      background: rgba(0,0,0,0.2);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .benefits h3 {
+      color: #FFD700;
+      margin-bottom: 1rem;
+      font-family: 'Cinzel Decorative', serif;
+      text-align: center;
+    }
+
+    .benefits ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .benefits li {
+      padding: 0.5rem 0;
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .benefits li::before {
+      content: "✨";
+      position: absolute;
+      left: 0;
+      color: #FFD700;
+    }
+
+    .button {
+      display: inline-block;
+      margin: 1rem 0.5rem;
+      background: linear-gradient(135deg, #E8B4B8, #8B0000);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .button.secondary {
+      background: transparent;
+      border: 2px solid #FFD700;
+      color: #FFD700;
+    }
+
+    .session-info {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(0,0,0,0.1);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .countdown {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .success-container {
+        margin: 1rem;
+        padding: 2rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .button {
+        display: block;
+        margin: 1rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="success-container">
+    <div class="success-icon">💖</div>
+    <h1>Welcome to Premium!</h1>
+    <p>Your payment was successful! You now have access to all premium romance content.</p>
+    
+    <div class="benefits">
+      <h3>Your Premium Benefits:</h3>
+      <ul>
+        <li>Unlimited access to all story chapters</li>
+        <li>High-quality illustrated video chapters</li>
+        <li>Premium voice narration options</li>
+        <li>Advanced avatar customization</li>
+        <li>Early access to new stories</li>
+        <li>Exclusive romantic content</li>
+        <li>Ad-free reading experience</li>
+        <li>Download stories for offline reading</li>
+      </ul>
+    </div>
+    
+    <a href="index.html" class="button">Start Reading</a>
+    <button onclick="openManageSubscription()" class="button secondary">Manage Subscription</button>
+    
+    <div class="session-info" id="session-info">
+      <p>Transaction completed successfully</p>
+    </div>
+    
+    <div class="countdown" id="countdown">
+      <p>Redirecting to your stories in <span id="timer">10</span> seconds...</p>
+    </div>
+  </div>
+
+  <script>
+    // Get session ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    
+    if (sessionId) {
+      document.getElementById('session-info').innerHTML = `
+        <p><strong>Session ID:</strong> ${sessionId}</p>
+        <p>Keep this for your records</p>
+      `;
+      
+      // Mark user as premium (in a real app, this would be handled server-side)
+      try {
+        localStorage.setItem('premiumUser', 'true');
+        localStorage.setItem('premiumSince', new Date().toISOString());
+        localStorage.setItem('sessionId', sessionId);
+      } catch(e) {
+        // Fallback for environments where localStorage isn't available
+        window.premiumUser = true;
+        window.premiumSince = new Date().toISOString();
+      }
+    }
+
+    function openManageSubscription() {
+      // In a real application, this would redirect to Stripe Customer Portal
+      alert('This would redirect to your subscription management portal where you can update payment methods, view invoices, and cancel if needed.');
+    }
+
+    // Countdown timer
+    let timeLeft = 10;
+    const timerElement = document.getElementById('timer');
+    
+    const countdown = setInterval(() => {
+      timeLeft--;
+      timerElement.textContent = timeLeft;
+      
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        window.location.href = 'index.html';
+      }
+    }, 1000);
+
+    // Allow user to cancel auto-redirect
+    document.addEventListener('click', () => {
+      clearInterval(countdown);
+      document.getElementById('countdown').style.display = 'none';
+    });
+
+    // Add some celebration effects
+    function createConfetti() {
+      const confetti = document.createElement('div');
+      confetti.style.position = 'fixed';
+      confetti.style.width = '10px';
+      confetti.style.height = '10px';
+      confetti.style.backgroundColor = ['#FFD700', '#FF69B4', '#00FF7F', '#87CEEB'][Math.floor(Math.random() * 4)];
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.top = '-10px';
+      confetti.style.pointerEvents = 'none';
+      confetti.style.borderRadius = '50%';
+      confetti.style.zIndex = '9999';
+      
+      document.body.appendChild(confetti);
+      
+      let pos = -10;
+      const fall = setInterval(() => {
+        pos += 5;
+        confetti.style.top = pos + 'px';
+        
+        if (pos > window.innerHeight) {
+          clearInterval(fall);
+          document.body.removeChild(confetti);
+        }
+      }, 50);
+    }
+
+    // Create confetti effect
+    for (let i = 0; i < 20; i++) {
+      setTimeout(createConfetti, i * 200);
+    }
+  </script>
+</body>
+</html>
