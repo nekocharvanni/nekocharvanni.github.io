@@ -1,244 +1,157 @@
-const modal = document.getElementById("signupmem");
-const btn = document.querySelector(".storynav");
-const span = document.querySelector(".close-btn");
+// Global state
+let currentStory = null;
+let currentChapter = 1;
+let maxFreeChapters = 3;
+let isReading = false;
+let speechSynthesis = window.speechSynthesis;
+let currentUtterance = null;
+let selectedPricing = 'all';
 
-btn.onclick = function () {
-  modal.style.display = "block";
-}
+// Story data
+const stories = {
+  'chocolate-matcha': {
+    title: 'Chocolate & Matcha',
+    chapters: 5,
+    content: {
+      1: {
+        title: 'Chapter 1: Osaka Tea Garden',
+        text: `In the garden following the path of arranged onyx marble stepping-stones, past the water basin and near cherry blossom trees in tranquil bloom, Kazuhiko Wakahisa sat on the stone bench sipping green tea he prepared. His eyes wandered past the shrubberies arranged simplistically around the garden to the jade fountain. Two intricately sculptured jade dragons twisted around a miniature jade Mount Fuji. Crystal clear water serenely flowed through their fangs, cascading down Mount Fuji until the water trickled into the base.`,
+        video: 'chocolate-matcha'
+      },
+      2: {
+        title: 'Chapter 2: The Encounter',
+        text: `"Haha, mother," he yelled at Charlene and humiliated Ryuku. "Not to mention his affair with Hanako Love." Charlene briefly listened to the conversation Natsumi was having with their mother. Natsumi was still attempting to sway their mother's decision to renounce their attendance at the ceremony.`,
+        video: 'chocolate-matcha'
+      },
+      3: {
+        title: 'Chapter 3: Rising Tensions',
+        text: `The ceremony was set to begin, and Kazuhiko found himself more nervous than he had been in years. The weight of tradition and expectation pressed down on him as he prepared the sacred tea. Little did he know that this ceremony would change everything.`,
+        video: 'chocolate-matcha'
+      },
+      4: {
+        title: 'Chapter 4: Forbidden Desires',
+        text: `As the tea ceremony progressed, Kazuhiko couldn't shake the memory of the mysterious woman who had thrown her drink at him. Her fierce eyes haunted his thoughts, stirring feelings he had never experienced before.`,
+        video: 'chocolate-matcha'
+      },
+      5: {
+        title: 'Chapter 5: Hearts Unveiled',
+        text: `The final confrontation between Kazuhiko and Charlene would determine whether their pride would keep them apart, or if love could bridge the gap between their different worlds.`,
+        video: 'chocolate-matcha'
+      }
+    }
+  },
+  'tiger-eyes': {
+    title: 'Her Tiger Eyes',
+    chapters: 6,
+    content: {
+      1: {
+        title: 'Chapter 1: The Ancient Library',
+        text: `The old library stood like a sentinel against time, its weathered stones holding secrets that predated the modern world. Amara traced her fingers along the ancient texts, feeling the mystical energy that seemed to pulse from within the leather-bound volumes.`,
+        video: 'tiger-eyes'
+      },
+      2: {
+        title: 'Chapter 2: Awakening Powers',
+        text: `As Amara delved deeper into the forbidden texts, she began to understand the truth about her heritage. The tiger eyes that had always made her different were not a curse, but a gift that connected her to an ancient magical lineage.`,
+        video: 'tiger-eyes'
+      }
+    }
+  },
+  'immortal-angel': {
+    title: 'Immortal Angel',
+    chapters: 8,
+    content: {
+      1: {
+        title: 'Chapter 1: The Awakening',
+        text: `For centuries, she had walked among mortals, her true nature hidden behind the facade of humanity. But tonight, everything would change when she met the one person who could see through her immortal disguise and touch her eternal soul.`,
+        video: 'immortal-angel'
+      }
+    }
+  }
+};
 
-span.onclick = function () {
-  modal.style.display = "none";
-}
-
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+// Section management
+function showSection(sectionName) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(section => {
+    section.style.display = 'none';
+  });
+  
+  // Show selected section
+  const targetSection = document.getElementById(sectionName + '-section');
+  if (targetSection) {
+    targetSection.style.display = 'block';
+    targetSection.classList.add('fade-in');
+    
+    // Show chapter reader when stories section is opened
+    if (sectionName === 'stories') {
+      document.querySelector('.chapter-reader').style.display = 'block';
+    }
   }
 }
 
-// ======= WAIT FOR DOM =======
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Text‐to‐Speech (TTS) for the story
-  const readStoryBtn = document.getElementById("readStoryBtn");
-  const storyContent = document.getElementById("story-content");
+// Story selection
+function selectStory(storyId) {
+  currentStory = storyId;
+  currentChapter = 1;
+  showSection('stories');
+  loadChapter();
+}
 
-  readStoryBtn.addEventListener("click", () => {
-    const storyText = storyContent.innerText.trim();
-    if (!storyText) return;
-
-    // Check if browser supports Web Speech API
-    if (!("speechSynthesis" in window)) {
-      alert("Sorry, your browser does not support text‐to‐speech.");
-      return;
-    }
-    // Create a new utterance
-    const utterance = new SpeechSynthesisUtterance(storyText);
-    utterance.rate = 1; // Normal speed
-    utterance.pitch = 1; // Normal pitch
-    speechSynthesis.cancel(); // In case something’s already playing
-    speechSynthesis.speak(utterance);
-  });
-
-  // 2. Avatar Customizer
-  const avatarPreview = document.getElementById("avatarPreview");
-  const baseAvatarImg = document.getElementById("baseAvatar");
-  const hairSelect = document.getElementById("hairSelect");
-  const eyesSelect = document.getElementById("eyesSelect");
-  const clothesSelect = document.getElementById("clothesSelect");
-  const skinColorInput = document.getElementById("skinColor");
-  const resetAvatarBtn = document.getElementById("resetAvatarBtn");
-
-  // Keep references to overlays
-  let hairLayer = null;
-  let eyesLayer = null;
-  let clothesLayer = null;
-  let skinLayer = null;
-
-  // Helper: create an <img> overlay with given src
-  function createOverlay(src, id) {
-    const img = document.createElement("img");
-    img.src = src;
-    img.id = id;
-    img.classList.add("avatar-layer");
-    img.style.position = "absolute";
-    img.style.top = "0";
-    img.style.left = "0";
-    img.style.width = "100%";
-    img.style.height = "auto";
-    return img;
+// Chapter loading
+function loadChapter() {
+  if (!currentStory || !stories[currentStory]) return;
+  
+  const story = stories[currentStory];
+  const chapter = story.content[currentChapter];
+  
+  if (!chapter) {
+    document.getElementById('chapter-content').innerHTML = '<p>Chapter not available</p>';
+    return;
   }
+  
+  document.getElementById('chapter-title').textContent = story.title;
+  document.getElementById('chapter-subtitle').textContent = chapter.title;
+  document.getElementById('chapter-content').innerHTML = `<p>${chapter.text}</p>`;
+  
+  // Generate video for chapter
+  if (window.ChapterVideoGenerator) {
+    generateChapterVideo(currentStory, chapter);
+  }
+  
+  saveProgress();
+}
 
-  // Clear existing layer if present
-  function removeLayer(layer) {
-    if (layer && avatarPreview.contains(layer)) {
-      avatarPreview.removeChild(layer);
+// Generate video using the video generator
+function generateChapterVideo(storyId, chapterData) {
+  const canvas = document.getElementById('story-canvas');
+  const ctx = canvas.getContext('2d');
+  
+  let frame = 0;
+  function animate() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Create background based on story theme
+    createStoryBackground(ctx, canvas, storyId, frame);
+    
+    // Add text overlay
+    if (frame > 60) { // Show text after 2 seconds
+      addTextOverlay(ctx, canvas, chapterData.title, frame - 60);
+    }
+    
+    frame++;
+    if (frame < 300) { // 10 seconds at 30fps
+      requestAnimationFrame(animate);
     }
   }
+  
+  animate();
+}
 
-  // WHEN user changes hair style
-  hairSelect.addEventListener("change", () => {
-    // Remove old hair layer
-    removeLayer(hairLayer);
-
-    const value = hairSelect.value;
-    if (value === "none") {
-      hairLayer = null;
-      return;
-    }
-    // Map selection to an image path
-    let imgPath = "";
-    switch (value) {
-      case "hair1":
-        imgPath = "assets/avatar/hair_black_long.png";
-        break;
-      case "hair2":
-        imgPath = "assets/avatar/hair_blonde_short.png";
-        break;
-      case "hair3":
-        imgPath = "assets/avatar/hair_red_curly.png";
-        break;
-      default:
-        imgPath = "";
-    }
-    if (imgPath) {
-      hairLayer = createOverlay(imgPath, "hairLayer");
-      avatarPreview.appendChild(hairLayer);
-    }
-  });
-
-  // WHEN user changes eyes
-  eyesSelect.addEventListener("change", () => {
-    removeLayer(eyesLayer);
-
-    const value = eyesSelect.value;
-    if (value === "none") {
-      eyesLayer = null;
-      return;
-    }
-    let imgPath = "";
-    switch (value) {
-      case "eyes1":
-        imgPath = "assets/avatar/eyes_brown.png";
-        break;
-      case "eyes2":
-        imgPath = "assets/avatar/eyes_green.png";
-        break;
-      case "eyes3":
-        imgPath = "assets/avatar/eyes_blue.png";
-        break;
-      default:
-        imgPath = "";
-    }
-    if (imgPath) {
-      eyesLayer = createOverlay(imgPath, "eyesLayer");
-      avatarPreview.appendChild(eyesLayer);
-    }
-  });
-
-  // WHEN user changes clothes
-  clothesSelect.addEventListener("change", () => {
-    removeLayer(clothesLayer);
-
-    const value = clothesSelect.value;
-    if (value === "none") {
-      clothesLayer = null;
-      return;
-    }
-    let imgPath = "";
-    switch (value) {
-      case "clothes1":
-        imgPath = "assets/avatar/clothes_kimono.png";
-        break;
-      case "clothes2":
-        imgPath = "assets/avatar/clothes_steampunk.png";
-        break;
-      case "clothes3":
-        imgPath = "assets/avatar/clothes_modern.png";
-        break;
-      default:
-        imgPath = "";
-    }
-    if (imgPath) {
-      clothesLayer = createOverlay(imgPath, "clothesLayer");
-      avatarPreview.appendChild(clothesLayer);
-    }
-  });
-
-  // WHEN user changes skin color
-  skinColorInput.addEventListener("input", () => {
-    // For simplicity, tint the base avatar's CSS filter
-    baseAvatarImg.style.filter = `opacity(0.8) drop-shadow(0 0 0 ${skinColorInput.value})`;
-  });
-
-  // Reset avatar to defaults
-  resetAvatarBtn.addEventListener("click", () => {
-    hairSelect.value = "none";
-    eyesSelect.value = "none";
-    clothesSelect.value = "none";
-    skinColorInput.value = "#f2d3c4"; // default tone
-    baseAvatarImg.style.filter = "";
-    removeLayer(hairLayer);
-    removeLayer(eyesLayer);
-    removeLayer(clothesLayer);
-    hairLayer = eyesLayer = clothesLayer = null;
-  });
-
-  // 3. Signup Modal Logic
-  const openSignupBtn = document.getElementById("openSignupBtn");
-  const signupModal = document.getElementById("signupModal");
-  const closeSignupBtn = document.getElementById("closeSignupBtn");
-  const signupForm = document.getElementById("signupForm");
-
-  openSignupBtn.addEventListener("click", () => {
-    signupModal.style.display = "flex";
-  });
-
-  closeSignupBtn.addEventListener("click", () => {
-    signupModal.style.display = "none";
-  });
-
-  // Close modal if user clicks outside content
-  window.addEventListener("click", (e) => {
-    if (e.target === signupModal) {
-      signupModal.style.display = "none";
-    }
-  });
-
-  // Handle form submission (you’ll need to wire this up to your email backend or service)
-  signupForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const emailInput = signupForm.querySelector('input[type="email"]').value;
-    if (emailInput) {
-      // For demo: just show an alert
-      alert(`Thanks for subscribing, ${emailInput}!`);
-      signupModal.style.display = "none";
-      signupForm.reset();
-    }
-  });
-
-  // 4. Basic “Bug Tests” (console logs)
-  function runBasicTests() {
-    console.group("Basic Site Tests");
-    console.assert(
-      !!document.getElementById("readStoryBtn"),
-      "❌ [Test Failed] readStoryBtn should exist"
-    );
-    console.assert(
-      !!document.getElementById("avatarPreview"),
-      "❌ [Test Failed] avatarPreview should exist"
-    );
-    console.assert(
-      !!document.getElementById("hairSelect"),
-      "❌ [Test Failed] hairSelect should exist"
-    );
-    console.assert(
-      !!document.querySelector("header"),
-      "❌ [Test Failed] header element should exist"
-    );
-    console.log("✅ If no ❌ errors above, basic DOM elements are present.");
-    console.groupEnd();
-  }
-
-  // Run tests once DOM is ready
-  runBasicTests();
-});
+// Create story-themed backgrounds
+function createStoryBackground(ctx, canvas, storyTheme, frame) {
+  switch (storyTheme) {
+    case 'chocolate-matcha':
+      drawTeaGardenScene(ctx, canvas, frame);
+      break;
+    case '
