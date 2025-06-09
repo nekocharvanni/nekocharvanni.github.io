@@ -1,90 +1,228 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" id="nekoDesktopViewport">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="styles.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
-    <title>Neko Charvanni</title>
-   </head>
-   <body>
-     <header>
-   <h1 id="neko">Neko Charvanni</h1>
-   <p class="intro"> Romance Is Here:</p>
-   <nav>
-    <ul>
-      <li><a href="">Home</a></li>
-      <li><a href="">Stories</a></li>
-      <li><a href="">Members</a></li>
-      <li><a href="">RomanceMe</a></li>
-      <li><a href="">Contact</a></li>
-     </ul>
-    </nav>
-
-    <nav>
-  <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#stories">Stories</a></li>
-    <li><a href="stories/story1.html">Chocolate & Matcha</a></li>
-    <li><a href="stories/story2.html">Her Tiger Eyes</a></li>
-    <li><a href="stories/story2.html">Immortal Angel</a></li>
-    <li><a href="stories/story2.html">Zen</a></li>
-    
-    <!-- etc. -->
-  </ul>
-</nav>
-       <!-- somewhere in <body> -->
-<a href="checkout.html" 
-   style="
-     display:inline-block;
-     background: #a3c65a;
-     color:#fff;
-     padding:0.75rem 1.5rem;
-     border-radius:6px;
-     text-decoration:none;
-     font-weight:bold;
-     box-shadow:0 2px 4px rgba(0,0,0,0.1);
-   ">
-  Buy Now
-</a>
-
-  </header>
-
-  <main>
-     <section>
-<hr>
-       <h2>About Neko Charvanni</h2>
-       <p>Neko Charvanni is a sensual storyteller and independent author crafting immersive LGBTQ+ paranormal romance with heart, heat, and humanity. Blending poetic prose with vivid worldbuilding, her stories explore love, identity, and transformation through strong femme-centered characters, mystical lineages, and emotionally raw journeys. </p>
-
-       <p>Rooted in a deep respect for cultural heritage and spiritual evolution, Neko’s work often weaves elements of African mythology, nature-based symbolism, and queer empowerment into richly layered narratives. Her signature style balances passion and vulnerability, drawing readers into emotionally intense stories that linger long after the final page.</p>
-
-       <p>When she’s not writing, Neko can be found studying languages, designing websites, knitting elaborate blankets, or cooking up business dreams in the kitchen. She’s a firm believer in self-taught mastery, storytelling as activism, and building a creative life on her own terms.</p>
-
-       <p>Whether you're here for the soulmates, the spice, or the supernatural — welcome to Neko's world.</p>
-    </section>
-   
-
-     <button class="storynav" type="button">Tell Me A Story!</button>
-
-    <div id="signupmem" class="mem">
-      <div class="mem-content">
-        <span class="close-btn">&times;</span>
-        <h2>Join the Romance</h2>
-        <p>Sign up to get updates, sneak peeks, and special extras.</p>
-        <form>
-          <input type="email" placeholder="Enter your email" required>
-          <button type="submit">Subscribe</button>
-        </form>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neko Charvanni - Interactive Romance Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="#" class="logo">Neko Charvanni</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#" onclick="showSection('home')">Home</a></li>
+          <li><a href="#" onclick="showSection('stories')">Stories</a></li>
+          <li><a href="#" onclick="showSection('avatar')">Avatar</a></li>
+          <li><a href="#" onclick="showSection('library')">My Library</a></li>
+        </ul>
+      </nav>
+      <div class="user-controls">
+        <button class="btn btn-secondary" onclick="showSection('avatar')">Customize Avatar</button>
+        <button class="btn btn-primary" onclick="showPaymentModal()">Unlock Premium</button>
       </div>
     </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Home Section -->
+    <section id="home-section" class="section">
+      <div class="hero">
+        <h1 class="fade-in">Welcome to Romance</h1>
+        <p class="fade-in">Immerse yourself in illustrated stories with voice narration and personalized avatars</p>
+        <button class="btn btn-primary pulse" onclick="showSection('stories')">Start Your Journey</button>
+      </div>
+
+      <div class="story-grid fade-in">
+        <div class="story-card" onclick="selectStory('chocolate-matcha')">
+          <h3>Chocolate & Matcha</h3>
+          <p>A sensual tale of tradition and passion in modern Osaka, where a master tea ceremony host meets his match.</p>
+          <div class="story-progress">
+            <div class="progress-bar" style="width: 60%"></div>
+          </div>
+          <p><strong>3/5 chapters unlocked</strong></p>
+        </div>
+
+        <div class="story-card" onclick="selectStory('tiger-eyes')">
+          <h3>Her Tiger Eyes</h3>
+          <p>A mystical romance where ancient magic meets modern love in the shadows of forgotten temples.</p>
+          <div class="story-progress">
+            <div class="progress-bar" style="width: 40%"></div>
+          </div>
+          <p><strong>2/6 chapters unlocked</strong></p>
+        </div>
+
+        <div class="story-card" onclick="selectStory('immortal-angel')">
+          <h3>Immortal Angel</h3>
+          <p>A paranormal romance spanning centuries, where love transcends death and time itself.</p>
+          <div class="story-progress">
+            <div class="progress-bar" style="width: 20%"></div>
+          </div>
+          <p><strong>1/8 chapters unlocked</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stories Section -->
+    <section id="stories-section" class="section" style="display: none;">
+      <div class="chapter-reader">
+        <div class="chapter-header">
+          <h2 class="chapter-title" id="chapter-title">Select a Story</h2>
+          <p class="chapter-subtitle" id="chapter-subtitle">Choose from our collection</p>
+        </div>
+
+        <div class="media-controls">
+          <button class="btn btn-secondary" onclick="toggleVideoMode()">
+            <span id="video-toggle">📹 Show Video</span>
+          </button>
+          <button class="btn btn-secondary" onclick="toggleTextReader()">
+            <span id="reader-toggle">🔊 Start Reading</span>
+          </button>
+          <button class="btn btn-secondary" onclick="showSection('avatar')">👤 Customize Avatar</button>
+        </div>
+
+        <div class="video-container" id="video-container" style="display: none;">
+          <canvas class="story-video" id="story-canvas" width="600" height="400"></canvas>
+        </div>
+
+        <div class="voice-controls">
+          <h4>Voice Settings</h4>
+          <div class="voice-settings">
+            <div>
+              <label>Voice:</label>
+              <select id="voice-select">
+                <option value="female-1">Sarah (Sultry)</option>
+                <option value="female-2">Emma (Romantic)</option>
+                <option value="male-1">James (Deep)</option>
+                <option value="male-2">Alex (Warm)</option>
+              </select>
+            </div>
+            <div>
+              <label>Speed:</label>
+              <input type="range" id="voice-speed" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            <div>
+              <label>Pitch:</label>
+              <input type="range" id="voice-pitch" min="0.5" max="2" step="0.1" value="1">
+            </div>
+          </div>
+        </div>
+
+        <div class="chapter-text" id="chapter-content">
+          <p>Select a story to begin your romantic journey...</p>
+        </div>
+
+        <div class="media-controls">
+          <button class="btn btn-secondary" onclick="previousChapter()">← Previous</button>
+          <button class="btn btn-primary" onclick="nextChapter()">Next Chapter →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Avatar Section -->
+    <section id="avatar-section" class="section avatar-section" style="display: none;">
+      <div class="avatar-customizer">
+        <h2>Customize Your Avatar</h2>
+        <p>Create your perfect romantic character</p>
+        
+        <div class="avatar-preview">
+          <canvas id="avatar-canvas" width="200" height="200"></canvas>
+        </div>
+
+        <div class="customization-panel">
+          <div class="customization-group">
+            <label>Skin Tone</label>
+            <input type="color" id="skin-color" value="#F2D3C4">
+          </div>
+          
+          <div class="customization-group">
+            <label>Hair Style</label>
+            <select id="hair-style">
+              <option value="long">Long & Flowing</option>
+              <option value="short">Short & Chic</option>
+              <option value="curly">Curly & Wild</option>
+              <option value="braided">Elegant Braids</option>
+            </select>
+          </div>
+          
+          <div class="customization-group">
+            <label>Hair Color</label>
+            <input type="color" id="hair-color" value="#8B4513">
+          </div>
+          
+          <div class="customization-group">
+            <label>Eye Shape</label>
+            <select id="eye-shape">
+              <option value="almond">Almond</option>
+              <option value="round">Round</option>
+              <option value="hooded">Hooded</option>
+              <option value="upturned">Upturned</option>
+            </select>
+          </div>
+          
+          <div class="customization-group">
+            <label>Eye Color</label>
+            <input type="color" id="eye-color" value="#8B4513">
+          </div>
+          
+          <div class="customization-group">
+            <label>Outfit Style</label>
+            <select id="outfit-style">
+              <option value="casual">Casual</option>
+              <option value="elegant">Elegant</option>
+              <option value="traditional">Traditional</option>
+              <option value="modern">Modern</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="media-controls">
+          <button class="btn btn-secondary" onclick="resetAvatar()">Reset</button>
+          <button class="btn btn-primary" onclick="saveAvatar()">Save Avatar</button>
+        </div>
+      </div>
+    </section>
   </main>
-     <script src="script.js"></script>
-   </body>
-   </html>
+
+  <!-- Payment Modal -->
+  <div class="payment-modal" id="payment-modal">
+    <div class="payment-content">
+      <button class="close-modal" onclick="hidePaymentModal()">&times;</button>
+      <h2>Unlock Premium Stories</h2>
+      <p>Continue your romantic journey with full access to all chapters</p>
+      
+      <div class="pricing-options">
+        <div class="pricing-option" onclick="selectPricing('single')" data-price="price_single_story">
+          <h3>Single Story</h3>
+          <p class="price">$4.99</p>
+          <p>Unlock all chapters of one story</p>
+        </div>
+        
+        <div class="pricing-option selected" onclick="selectPricing('all')" data-price="price_all_stories">
+          <h3>All Stories Access</h3>
+          <p class="price">$12.99</p>
+          <p>Unlock all current and future stories</p>
+        </div>
+        
+        <div class="pricing-option" onclick="selectPricing('monthly')" data-price="price_monthly">
+          <h3>Monthly Subscription</h3>
+          <p class="price">$7.99/month</p>
+          <p>Monthly access + exclusive content</p>
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" onclick="processPurchase()">Purchase Now</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="utils/videoGenerator.js"></script>
+</body>
+</html>
